@@ -24,11 +24,24 @@ def saveFileNames(img_list):
     selected_images = {'target_images': img_list}
 
     with open('selectedimages.json', 'w', encoding='utf8') as outfile:
-        str_ = json.dumps(selected_images,
+        str_ = json.dumps(cleanDictionary(selected_images),
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
 
         outfile.write(to_unicode(str_))
+
+
+# clean up the dictionary if null items exist
+def cleanDictionary(dictry):
+    better_dict = {}
+    for x, y in dictry.items():
+        if isinstance(y, dict):
+            nested = cleanDictionary(y)
+            if len(nested.keys()) > 0:
+                better_dict[x] = nested
+        elif y is not None:
+            better_dict[x] = y
+    return better_dict
 
 
 # setup the delete functionality of details from the json file###################################
@@ -127,4 +140,4 @@ def getSelectedImages():
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         for a in s_data['target_images']:
-            print(a + " image found in folder")
+            print(a)
