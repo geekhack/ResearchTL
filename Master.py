@@ -1,4 +1,4 @@
-import Matching as mt
+import Matching as mat
 
-#execute the functionality defined in Matching
-mt.getSelectedImages()
+#exc starts here
+mat.getSelectedImages()

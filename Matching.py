@@ -11,7 +11,7 @@ except NameError:
     to_unicode = str
 
 # set the parameters
-my_path = 'data'
+my_path = 'Data'
 only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
 images = np.empty(len(only_files), dtype=object)
 selected_images_array = []
@@ -27,6 +27,7 @@ def saveFileNames(img_list):
         str_ = json.dumps(selected_images,
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
+
         outfile.write(to_unicode(str_))
 
 
@@ -46,11 +47,11 @@ def deleteFileContents():
 # overfitting
 
 #############################setup the training function #######################################################
-def imageProcessing(query_image, training_image):
-    train_img = cv2.imread(training_image)
+def imageProcessing(query_image, training_image, tr_image_name):
+    # train_img = cv2.imread(training_image)
     # Convert it to grayscale
     query_img_bw = cv2.cvtColor(query_image, cv2.COLOR_BGR2GRAY)
-    train_img_bw = cv2.cvtColor(train_img, cv2.COLOR_BGR2GRAY)
+    train_img_bw = cv2.cvtColor(training_image, cv2.COLOR_BGR2GRAY)
 
     # Initialize the ORB detector algorithm
     orb = cv2.ORB_create()
@@ -64,7 +65,7 @@ def imageProcessing(query_image, training_image):
 
     # draw the matches to the final image
     final_img = cv2.drawMatches(query_img, qImageKeypoints,
-                                train_img, trainKeypoints, matches[:20], None)
+                                training_image, trainKeypoints, matches[:20], None)
     # resize the final image
     cv2.resize(final_img, (1000, 650))
 
@@ -78,9 +79,10 @@ def imageProcessing(query_image, training_image):
 
         if m.distance < lowest_ratio * j.distance:
             good.append([m])
-    if len(good) > 52:
-        resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + training_image
-        return training_image
+    if len(good) > 220:
+        resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName
+        print(resultMsg)
+        return imageName
 
 
 ############################################## end of training ##########################################################
@@ -103,10 +105,15 @@ for n in range(0, len(only_files)):
     # get the name of the image
     imageName = only_files[n]
     # then perform some orb on the image at position n
-    p.append(imageProcessing(query_img, imageName))
+    p.append(imageProcessing(query_img, images[n], imageName))
 
 # then call the save method
 new_selected_images = p[1:]
+updated_new_selected_images = []
+for val in new_selected_images:
+    if val != None:
+        updated_new_selected_images.append(val)
+
 saveFileNames(new_selected_images)
 
 
@@ -120,4 +127,4 @@ def getSelectedImages():
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         for a in s_data['target_images']:
-            print(a + " iko kwa folder")
+            print(a + " image found in folder")
