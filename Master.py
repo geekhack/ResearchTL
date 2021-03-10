@@ -1,4 +1,6 @@
 import Matching as mt
+import tensorflow as tf
+import DataSetCreator
 import numpy as np
 from tensorflow.keras.preprocessing import image as Img
 
@@ -32,3 +34,15 @@ for vl_img in validation_array:
     val_list_dataset.append(data_path + "/" + vl_img)
 
 print(val_list_dataset)
+
+dataset_check = tf.data.Dataset.list_files(data_path+"/*.jpg")
+
+for f in dataset_check:
+    print(f)
+
+dataProcessor = DataSetCreator.DataSetCreator(32, 300, 500,dataset_check)
+dataProcessor.load_process()
+
+
+image_batch, label_batch = dataProcessor.get_batch()
+

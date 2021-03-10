@@ -1,5 +1,7 @@
 import tensorflow as tf
+import os
 
+CLASS_NAMES = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips'] # flower labels (folder names in the data)
 
 class DataSetCreator(object):
     def __init__(self, batch_size, image_height, image_width, dataset):
