@@ -1,8 +1,6 @@
 {
     "target_images": [
-        null,
-        null,
-        null,
+        "bic4.jpg",
         "car1.jpg",
         "carf2.jpg",
         "carf3.jpg",

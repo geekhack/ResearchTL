@@ -127,7 +127,7 @@ for val in new_selected_images:
     if val != None:
         updated_new_selected_images.append(val)
 
-saveFileNames(new_selected_images)
+saveFileNames(updated_new_selected_images)
 
 
 ##################################end of writing images into json file############################################
@@ -137,7 +137,10 @@ saveFileNames(new_selected_images)
 # load the json file
 
 def getSelectedImages():
+    s_images=[]
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         for a in s_data['target_images']:
-            print(a)
+            s_images.append(a)
+
+    return s_images
