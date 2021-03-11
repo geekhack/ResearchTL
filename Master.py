@@ -1,4 +1,5 @@
-import Matching as mt
+#import Matching as mt
+import MatcherFolder as mt
 import tensorflow as tf
 import DataSetCreator
 import numpy as np
@@ -41,9 +42,9 @@ for f in dataset_check:
     item = f.numpy()
     #print(item)
 
-img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255, rotation_range=20)
-images, labels = next(img_gen.flow_from_directory(data_path+'/train'))
-print(images[0])
+# img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255, rotation_range=20)
+# images, labels = next(img_gen.flow_from_directory(data_path+'/train'))
+# print(images[0])
 # dataProcessor = DataSetCreator.DataSetCreator(32, 300, 500,dataset_check)
 # dataProcessor.load_process()
 #
