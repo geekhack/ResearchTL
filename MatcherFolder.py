@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 from os import listdir
 from os.path import isfile, join
-from tkinter.filedialog import askopenfilename
 import json
 
 try:
@@ -11,7 +10,7 @@ except NameError:
     to_unicode = str
 
 # set the parameters
-my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/cars' # images from the imagenet source
+my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/cars'  # images from the imagenet source
 only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
 images = np.empty(len(only_files), dtype=object)
 selected_images_array = []
@@ -63,7 +62,7 @@ def deleteFileContents():
 def imageProcessing(query_image, training_image, tr_image_name):
     # train_img = cv2.imread(training_image)
     # Convert it to grayscale
-    #print(tr_image_name)
+    # print(tr_image_name)
     query_img_bw = cv2.cvtColor(query_image, cv2.COLOR_BGR2GRAY)
     train_img_bw = cv2.cvtColor(training_image, cv2.COLOR_BGR2GRAY)
 
@@ -104,25 +103,25 @@ def imageProcessing(query_image, training_image, tr_image_name):
 
 ######################################read the image from a folder####################################################
 # image to compare with
-#imageq = askopenfilename(filetypes=[("image", "*.jpg")])  # queryImage
-#images from the pests dataset
+# imageq = askopenfilename(filetypes=[("image", "*.jpg")])  # queryImage
+# images from the pests dataset
 pests_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/bics'
 p_files = [f for f in listdir(pests_path) if isfile(join(pests_path, f))]
 pests_images = np.empty(len(p_files), dtype=object)
 p = []
 for m in range(0, len(p_files)):
+    deleteFileContents()
     ##############read all the other images from the folder##################################
     pests_images[m] = cv2.imread(join(pests_path, p_files[m]))
     # get the name of the image
     imageName = p_files[m]
-    #execute the loop once to avoid execution of the outer loop in the inner loop
+    # execute the loop once to avoid execution of the outer loop in the inner loop
     if m == 1:
-        for s in range(0,len(p_files)):
-            query_img = cv2.imread(pests_path+'/'+p_files[s])
-            p.append(p_files[s])
+        for s in range(0, len(p_files)):
+            query_img = cv2.imread(pests_path + '/' + p_files[s])
+
             if s == 1:
                 for n in range(0, len(only_files)):
-                    #deleteFileContents()
                     ##############read all the other images from the folder##################################
                     images[n] = cv2.imread(join(my_path, only_files[n]))
                     # get the name of the image
@@ -134,19 +133,6 @@ for m in range(0, len(p_files)):
         break
 
 #######################################end of reading images from pests folder################################################
-
-################################loop through the images##############################################################
-# p = []
-# for n in range(0, len(only_files)):
-#     deleteFileContents()
-#     ##############read all the other images from the folder##################################
-#     images[n] = cv2.imread(join(my_path, only_files[n]))
-#     # get the name of the image
-#     imageName = only_files[n]
-#     for j in pests_images:
-#         # then perform some orb on the image at position n
-#         p.append(imageProcessing(pests_path+'/'+str(j), images[n], imageName))
-
 # then call the save method
 new_selected_images = p[1:]
 updated_new_selected_images = []
@@ -164,7 +150,7 @@ saveFileNames(updated_new_selected_images)
 # load the json file
 
 def getSelectedImages():
-    s_images=[]
+    s_images = []
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         for a in s_data['target_images']:
