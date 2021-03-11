@@ -61,7 +61,7 @@ def deleteFileContents():
 # overfitting
 
 #############################setup the training function #######################################################
-def imageProcessing(query_image, training_image, tr_image_name):
+def imageProcessing(query_image, training_image, imageName):
     # train_img = cv2.imread(training_image)
     # Convert it to grayscale
     query_img_bw = cv2.cvtColor(query_image, cv2.COLOR_BGR2GRAY)

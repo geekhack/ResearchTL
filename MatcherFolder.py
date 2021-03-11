@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from os import listdir
+import tensorflow as tf
 from os.path import isfile, join
 import json
 
@@ -9,18 +10,14 @@ try:
 except NameError:
     to_unicode = str
 
-# set the parameters
-my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/cars'  # images from the imagenet source
-only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
-images = np.empty(len(only_files), dtype=object)
 selected_images_array = []
 good = []
 
 
 # save the filenames in an array for use when training
-def saveFileNames(img_list):
-    # create dictionary for storing the data
-    selected_images = {'target_images': img_list}
+def saveTrainingFileNames(img_list):
+    # create dictionary with a set(remove duplicates)for storing the data
+    selected_images = {'target_images': list(set(img_list))}
 
     with open('selectedimages.json', 'w', encoding='utf8') as outfile:
         str_ = json.dumps(cleanDictionary(selected_images),
@@ -59,7 +56,7 @@ def deleteFileContents():
 # overfitting
 
 #############################setup the training function #######################################################
-def imageProcessing(query_image, training_image, tr_image_name):
+def imageProcessing(query_image, training_image, imageName, xx,label):
     # train_img = cv2.imread(training_image)
     # Convert it to grayscale
     # print(tr_image_name)
@@ -93,7 +90,8 @@ def imageProcessing(query_image, training_image, tr_image_name):
         if m.distance < lowest_ratio * j.distance:
             good.append([m])
     if len(good) > 220:
-        resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName
+        resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
+                                                                                                                'label:' + label
         print(resultMsg)
         return imageName
 
@@ -101,46 +99,63 @@ def imageProcessing(query_image, training_image, tr_image_name):
 ############################################## end of training ##########################################################
 
 
-######################################read the image from a folder####################################################
-# image to compare with
-# imageq = askopenfilename(filetypes=[("image", "*.jpg")])  # queryImage
-# images from the pests dataset
-pests_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/bics'
-p_files = [f for f in listdir(pests_path) if isfile(join(pests_path, f))]
-pests_images = np.empty(len(p_files), dtype=object)
-p = []
-for m in range(0, len(p_files)):
-    deleteFileContents()
-    ##############read all the other images from the folder##################################
-    pests_images[m] = cv2.imread(join(pests_path, p_files[m]))
-    # get the name of the image
-    imageName = p_files[m]
-    # execute the loop once to avoid execution of the outer loop in the inner loop
-    if m == 1:
-        for s in range(0, len(p_files)):
-            query_img = cv2.imread(pests_path + '/' + p_files[s])
+######################################read the images to feature match from folder####################################################
+# use the images from resnet(source) to feature match those for others(in Data folder
+# e.g. pests,dogs and cats etc
+def sortTrainImages():
+    # set the parameters for the training data
+    # get the class labels from training datasets
+    data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
+    img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
+    labels = img_gen.flow_from_directory(data_path + '/train')
+    train_labels = labels.class_indices.keys()
 
-            if s == 1:
-                for n in range(0, len(only_files)):
-                    ##############read all the other images from the folder##################################
-                    images[n] = cv2.imread(join(my_path, only_files[n]))
-                    # get the name of the image
-                    imageName = only_files[n]
-                    # then perform some orb on the image at position n
-                    p.append(imageProcessing(query_img, images[n], imageName))
+    for lbl in train_labels:
+        my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/' + lbl  # images from the imagenet source
+        only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
+        images = np.empty(len(only_files), dtype=object)
+
+        # set the parameters for the matching feature images
+        resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
+        p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
+        pests_images = np.empty(len(p_files), dtype=object)
+        p = []
+        for m in range(0, len(p_files)):
+            deleteFileContents()
+            ##############read all the other images from the folder##################################
+            pests_images[m] = cv2.imread(join(resnet_path, p_files[m]))
+            # get the name of the image
+            imageName_x = p_files[m]
+            # execute the loop once to avoid execution of the outer loop in the inner loop
+            if m == 1:
+                for s in range(0, len(p_files)):
+
+                    for n in range(0, len(only_files)):
+                        query_img = cv2.imread(resnet_path + '/' + p_files[s])
+                        # ##############read all the other images from the folder##################################
+                        images[n] = cv2.imread(join(my_path, only_files[n]))
+                        # get the name of the image
+                        imageName = only_files[n]
+
+                        # then perform some orb on the image at position n
+                        p.append(imageProcessing(query_img, images[n], imageName, p_files[s],lbl))
+
                 break
+        return p
 
-        break
 
 #######################################end of reading images from pests folder################################################
 # then call the save method
-new_selected_images = p[1:]
+# get the class items
+train_images = sortTrainImages()
+new_selected_images = train_images[1:]
+
 updated_new_selected_images = []
 for val in new_selected_images:
     if val != None:
         updated_new_selected_images.append(val)
 
-saveFileNames(updated_new_selected_images)
+saveTrainingFileNames(updated_new_selected_images)
 
 
 ##################################end of writing images into json file############################################
