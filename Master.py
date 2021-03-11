@@ -38,11 +38,15 @@ print(val_list_dataset)
 dataset_check = tf.data.Dataset.list_files(data_path+"/*.jpg")
 
 for f in dataset_check:
-    print(f)
+    item = f.numpy()
+    #print(item)
 
-dataProcessor = DataSetCreator.DataSetCreator(32, 300, 500,dataset_check)
-dataProcessor.load_process()
-
-
-image_batch, label_batch = dataProcessor.get_batch()
+img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255, rotation_range=20)
+images, labels = next(img_gen.flow_from_directory(data_path+'/train'))
+print(images[0])
+# dataProcessor = DataSetCreator.DataSetCreator(32, 300, 500,dataset_check)
+# dataProcessor.load_process()
+#
+#
+# image_batch, label_batch = dataProcessor.get_batch()
 
