@@ -1,7 +1,16 @@
 {
-    "target_images": [
-        "carf2.jpg",
+    "bics": [
+        "bic2.jpg",
         "bic1.jpg",
-        "bic2.jpg"
+        "carf2.jpg"
+    ],
+    "buses": [
+        "bic1.jpg",
+        "carf2.jpg"
+    ],
+    "cars": [
+        "bic2.jpg",
+        "bic3.jpg",
+        "bic1.jpg"
     ]
 }

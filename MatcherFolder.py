@@ -14,13 +14,27 @@ selected_images_array = []
 good = []
 
 
+# merge the images from the various classes into their own dictionary lists
+def merge_dictionary_lists(dict_list):
+    return {
+        k: [d.get(k) for d in dict_list if k in d]  # explanation A
+        for k in set().union(*dict_list)  # explanation B
+    }
+
+
 # save the filenames in an array for use when training
 def saveTrainingFileNames(img_list):
-    # create dictionary with a set(remove duplicates)for storing the data
-    selected_images = {'target_images': list(set(img_list))}
+    imgs_lst = merge_dictionary_lists(img_list)
+    upd_dictionary = {}
+    # write the specific details into own file
+    for mg in imgs_lst:
+        # # create dictionary with a set(remove duplicates)for storing the data
+        selected_images = {mg: list(set(imgs_lst[mg]))}
+        upd_dictionary.update(selected_images)
 
+    # write to the json file with the updated dictionary
     with open('selectedimages.json', 'w', encoding='utf8') as outfile:
-        str_ = json.dumps(cleanDictionary(selected_images),
+        str_ = json.dumps(cleanDictionary(upd_dictionary),
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
 
@@ -56,7 +70,10 @@ def deleteFileContents():
 # overfitting
 
 #############################setup the training function #######################################################
-def imageProcessing(query_image, training_image, imageName, xx,label):
+def imageProcessing(query_image, training_image, imageName, xx, label):
+    # create a dictionary to return image and its label
+    image_label = {}
+
     # train_img = cv2.imread(training_image)
     # Convert it to grayscale
     # print(tr_image_name)
@@ -89,14 +106,13 @@ def imageProcessing(query_image, training_image, imageName, xx,label):
 
         if m.distance < lowest_ratio * j.distance:
             good.append([m])
+
     if len(good) > 220:
+        image_label = {label: imageName}
         resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
                                                                                                                 'label:' + label
-        print(resultMsg)
-        return imageName
-
-
-############################################## end of training ##########################################################
+        # print(resultMsg)
+        return image_label
 
 
 ######################################read the images to feature match from folder####################################################
@@ -105,6 +121,7 @@ def imageProcessing(query_image, training_image, imageName, xx,label):
 def sortTrainImages():
     # set the parameters for the training data
     # get the class labels from training datasets
+    p = []
     data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
     img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
     labels = img_gen.flow_from_directory(data_path + '/train')
@@ -119,7 +136,7 @@ def sortTrainImages():
         resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
         p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
         pests_images = np.empty(len(p_files), dtype=object)
-        p = []
+
         for m in range(0, len(p_files)):
             deleteFileContents()
             ##############read all the other images from the folder##################################
@@ -136,19 +153,19 @@ def sortTrainImages():
                         images[n] = cv2.imread(join(my_path, only_files[n]))
                         # get the name of the image
                         imageName = only_files[n]
-
                         # then perform some orb on the image at position n
-                        p.append(imageProcessing(query_img, images[n], imageName, p_files[s],lbl))
+                        p.append(imageProcessing(query_img, images[n], imageName, p_files[s], lbl))
 
                 break
-        return p
+    return p
 
 
 #######################################end of reading images from pests folder################################################
 # then call the save method
 # get the class items
 train_images = sortTrainImages()
-new_selected_images = train_images[1:]
+# new_selected_images = train_images[1:]
+new_selected_images = train_images
 
 updated_new_selected_images = []
 for val in new_selected_images:
@@ -164,11 +181,10 @@ saveTrainingFileNames(updated_new_selected_images)
 # first display the data in the dictionary
 # load the json file
 
-def getSelectedImages():
-    s_images = []
+def getSelectedTrainingImages():
+
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
-        for a in s_data['target_images']:
-            s_images.append(a)
+        s_images = s_data
 
     return s_images

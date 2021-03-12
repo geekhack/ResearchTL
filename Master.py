@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing import image as Img
 
 data_path = 'Data'
 # get the images for loading from the json file
-sel_images = mt.getSelectedImages()
+sel_images = mt.getSelectedTrainingImages()
 # set the ratios for training and validation
 # 70% of the images to be training
 training_len = int(0.70 * len(sel_images))
