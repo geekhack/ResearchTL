@@ -1,5 +1,4 @@
-#import Matching as mt
-import MatcherFolder as mt
+import Matching as mt
 import tensorflow as tf
 import DataSetCreator
 import numpy as np
@@ -7,7 +6,7 @@ from tensorflow.keras.preprocessing import image as Img
 
 data_path = 'Data'
 # get the images for loading from the json file
-sel_images = mt.getSelectedTrainingImages()
+sel_images = mt.getSelectedImages()
 # set the ratios for training and validation
 # 70% of the images to be training
 training_len = int(0.70 * len(sel_images))

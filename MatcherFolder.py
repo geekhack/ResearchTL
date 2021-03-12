@@ -1,9 +1,15 @@
 import cv2
 import numpy as np
+from collections import defaultdict
+import os
 from os import listdir
+import os.path as osp
 import tensorflow as tf
 from os.path import isfile, join
 import json
+import pandas as pd
+import csv
+import sys
 
 try:
     to_unicode = np.unicode
@@ -57,7 +63,7 @@ def cleanDictionary(dictry):
 # setup the delete functionality of details from the json file###################################
 def deleteFileContents():
     # in case the json file has some data,clear it to accomodate the data acquired from the new reading
-    with open('selectedimages.json', 'w', encoding='utf8') as json_file:
+    with open('selectedimages.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
         json_file.close()
     # end of clearing the file contents
@@ -107,8 +113,8 @@ def imageProcessing(query_image, training_image, imageName, xx, label):
         if m.distance < lowest_ratio * j.distance:
             good.append([m])
 
-    if len(good) > 220:
-        image_label = {label: imageName}
+    if len(good) > 800:
+        image_label = {label: 'Data/train/'+label+'/'+imageName}
         resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
                                                                                                                 'label:' + label
         # print(resultMsg)
@@ -182,9 +188,30 @@ saveTrainingFileNames(updated_new_selected_images)
 # load the json file
 
 def getSelectedTrainingImages():
-
     with open('selectedimages.json') as selected_images_file:
         s_data = json.load(selected_images_file)
-        s_images = s_data
+        images_array = []
+        for o in s_data:
+            for p in s_data[o]:
+                dic_toy = {'class': o, 'image': p}
+                images_array.append(dic_toy)
 
-    return s_images
+        x = []
+        for d in images_array:
+            x.append(list(d.values()))
+
+        df = pd.DataFrame(x)
+        df.columns = ['class', 'image']
+        df.to_csv('data.csv', index=False)
+        # if osp.exists(file_path):
+        #     os.remove(file_path)
+        #     df = pd.read_json(r'D:\pycharmProjects\ResearchTL\ResearchTL\selectedimages.json',lines=True)
+        #     print(df)
+        #     #df.to_csv(r'D:\pycharmProjects\ResearchTL\ResearchTL\data.csv', index=False, header=True)
+        #
+        #
+        # else:
+        #
+        #     df = pd.read_json(r'D:\pycharmProjects\ResearchTL\ResearchTL\selectedimages.json', lines=True)
+        #     #df.to_csv(r'D:\pycharmProjects\ResearchTL\ResearchTL\data.csv', index=False, header=True)
+        #     print(df)
