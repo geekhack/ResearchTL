@@ -1,10 +1,10 @@
 {
     "bics": [
-        "Data/train/bics/carf2.jpg"
+        "bics/carf2.jpg"
     ],
     "cars": [
-        "Data/train/cars/bic2.jpg",
-        "Data/train/cars/bic3.jpg",
-        "Data/train/cars/bic1.jpg"
+        "cars/bic1.jpg",
+        "cars/bic3.jpg",
+        "cars/bic2.jpg"
     ]
 }

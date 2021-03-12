@@ -1,5 +1,5 @@
-class,image
-bics,Data/train/bics/carf2.jpg
-cars,Data/train/cars/bic2.jpg
-cars,Data/train/cars/bic3.jpg
-cars,Data/train/cars/bic1.jpg
+label,file
+bics,bics/carf2.jpg
+cars,cars/bic1.jpg
+cars,cars/bic3.jpg
+cars,cars/bic2.jpg

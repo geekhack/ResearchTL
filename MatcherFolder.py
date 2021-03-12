@@ -1,15 +1,10 @@
 import cv2
 import numpy as np
-from collections import defaultdict
-import os
 from os import listdir
-import os.path as osp
 import tensorflow as tf
 from os.path import isfile, join
 import json
 import pandas as pd
-import csv
-import sys
 
 try:
     to_unicode = np.unicode
@@ -114,7 +109,7 @@ def imageProcessing(query_image, training_image, imageName, xx, label):
             good.append([m])
 
     if len(good) > 800:
-        image_label = {label: 'Data/train/'+label+'/'+imageName}
+        image_label = {label: label + '/' + imageName}
         resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
                                                                                                                 'label:' + label
         # print(resultMsg)
@@ -193,7 +188,7 @@ def getSelectedTrainingImages():
         images_array = []
         for o in s_data:
             for p in s_data[o]:
-                dic_toy = {'class': o, 'image': p}
+                dic_toy = {'label': o, 'file': p}
                 images_array.append(dic_toy)
 
         x = []
@@ -201,17 +196,5 @@ def getSelectedTrainingImages():
             x.append(list(d.values()))
 
         df = pd.DataFrame(x)
-        df.columns = ['class', 'image']
+        df.columns = ['label', 'file']
         df.to_csv('data.csv', index=False)
-        # if osp.exists(file_path):
-        #     os.remove(file_path)
-        #     df = pd.read_json(r'D:\pycharmProjects\ResearchTL\ResearchTL\selectedimages.json',lines=True)
-        #     print(df)
-        #     #df.to_csv(r'D:\pycharmProjects\ResearchTL\ResearchTL\data.csv', index=False, header=True)
-        #
-        #
-        # else:
-        #
-        #     df = pd.read_json(r'D:\pycharmProjects\ResearchTL\ResearchTL\selectedimages.json', lines=True)
-        #     #df.to_csv(r'D:\pycharmProjects\ResearchTL\ResearchTL\data.csv', index=False, header=True)
-        #     print(df)
