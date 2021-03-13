@@ -3,8 +3,8 @@
         "bics/carf2.jpg"
     ],
     "cars": [
-        "cars/bic2.jpg",
         "cars/bic1.jpg",
+        "cars/bic2.jpg",
         "cars/bic3.jpg"
     ]
 }
