@@ -136,7 +136,7 @@ def imageProcessing(query_image, training_image, imageName, xx, label):
         if m.distance < lowest_ratio * j.distance:
             good.append([m])
 
-    if len(good) > 800:
+    if len(good) > 950:
         image_label = {label: label + '/' + imageName}
         resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
                                                                                                                 'label:' + label
@@ -151,18 +151,21 @@ def sortTrainImages():
     # set the parameters for the training data
     # get the class labels from training datasets
     p = []
-    data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
+    #data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
+    data_path = './Data'
     img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
     labels = img_gen.flow_from_directory(data_path + '/train')
     train_labels = labels.class_indices.keys()
 
     for lbl in train_labels:
-        my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/' + lbl  # images from the imagenet source
+        # my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/' + lbl
+        my_path = './Data/train/' + lbl  # images from the imagenet source
         only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
         images = np.empty(len(only_files), dtype=object)
 
         # set the parameters for the matching feature images
-        resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
+        #resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
+        resnet_path = './RefImages'
         p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
         pests_images = np.empty(len(p_files), dtype=object)
 
@@ -198,18 +201,21 @@ def sortValidationImages():
     # set the parameters for the training data
     # get the class labels from training datasets
     v = []
-    data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
+    #data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
+    data_path = './Data'
     img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
     labels = img_gen.flow_from_directory(data_path + '/validate')
     train_labels = labels.class_indices.keys()
 
     for lbl in train_labels:
-        my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/validate/' + lbl  # images from the imagenet source
+        # my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/validate/' + lbl  # images from the imagenet source
+        my_path = './Data/validate/' + lbl
         only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
         images = np.empty(len(only_files), dtype=object)
 
         # set the parameters for the matching feature images
-        resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
+        #resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
+        resnet_path = './RefImages'
         p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
         pests_images = np.empty(len(p_files), dtype=object)
 

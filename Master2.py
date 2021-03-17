@@ -73,8 +73,8 @@ for _ in range(len(training_dataset.filenames)):
     t_labels.append(label)
     print(image.shape)
     # display the first image from the iterator
-    # plt.imshow(image[0])
-    # plt.show()
+    #plt.imshow(image[0])
+    plt.show()
 
 # loop through the validation images
 print("***************Validation images***************")
