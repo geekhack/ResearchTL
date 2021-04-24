@@ -10,18 +10,21 @@ model = model_name(include_top=False,
                      weights="imagenet",
                      input_tensor=input_t)
 #print(res_model.summary())
+# get the layer index
+def getLayerIndex(model, layer_name):
+    for pos, layer in enumerate(model.layers):
+        if layer.name == layer_name:
+            return pos
+
+
 for layer in model.layers[:-2]:
     x = np.array(layer.get_weights()).ndim
-    array=np.array(layer.get_weights())
-    if(model_name!=resnet50):
-        if (len(array) > 0) and (x != 2) and (x>2):
-            print(str(len(array))+"for:"+layer.name)
-    elif(model_name==resnet50):
-        if (len(array) > 0) and (x != 2):
-            print(str(len(array))+"for:"+layer.name)
-    #x = np.array(layer.get_weights()).shape
-    # if x == 1:
-    #     #check if value contained is 0 or not
-    #     m=np.array([0,])
-    #     if(array == m.shape):
-    #         print(array)
+    array = np.array(layer.get_weights())
+    if (model_name != resnet50) or (model_name != vgg16):
+        if (len(array) > 0) and (x > 2):
+            index = getLayerIndex(model, layer.name)
+            print(str(len(array)) + "for:" + layer.name + "at index:" + str(index))
+    if (model_name == resnet50) or (model_name == vgg16):
+        if len(array) > 0 and (x != 2):
+            index = getLayerIndex(model, layer.name)
+            print(str(len(array)) + "for:" + layer.name + "at index:" + str(index))

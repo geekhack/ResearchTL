@@ -9,11 +9,22 @@ input_t = keras.Input(shape=(224, 224, 3))
 model = model_name(include_top=False,
                      weights="imagenet",
                      input_tensor=input_t)
-print(model.summary())
+# get the layer index
+def getLayerIndex(model, layer_name):
+    for pos, layer in enumerate(model.layers):
+        if layer.name == layer_name:
+            return pos
+
+
+
 for layer in model.layers[:-2]:
     x = np.array(layer.get_weights()).ndim
     array = np.array(layer.get_weights())
-    #evaluate that the length of array is greater than 0(empty arrays that correspond to activation
-    #layers and that it is ndim is not 2 since that represents batch normalization layers
-    if (len(array) > 0) and (x != 2):
-        print(str(len(array)) + "for:" + layer.name)
+    if (model_name != resnet50) or (model_name != vgg16):
+        if (len(array) > 0) and (x > 2):
+            index = getLayerIndex(model, layer.name)
+            print(str(len(array)) + "for:" + layer.name + "at index:" + str(index))
+    if (model_name == resnet50) or (model_name == vgg16):
+        if len(array) > 0 and (x != 2):
+            index = getLayerIndex(model, layer.name)
+            print(str(len(array)) + "for:" + layer.name + "at index:" + str(index))

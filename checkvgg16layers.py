@@ -1,15 +1,15 @@
 import numpy as np
 from tensorflow import keras
-from tensorflow.keras.applications.mobilenet import MobileNet as mobilenet
 from tensorflow.keras.applications.resnet50 import ResNet50 as resnet50
 from tensorflow.keras.applications.vgg16 import VGG16 as vgg16
 
-model_name=mobilenet
+model_name = vgg16
 input_t = keras.Input(shape=(224, 224, 3))
-model = model_name(include_top=False,
-                     weights="imagenet",
-                     input_tensor=input_t)
-#print(res_model.summary())
+model = vgg16(include_top=False,
+              weights="imagenet",
+              input_tensor=input_t)
+
+
 # get the layer index
 def getLayerIndex(model, layer_name):
     for pos, layer in enumerate(model.layers):
@@ -19,6 +19,7 @@ def getLayerIndex(model, layer_name):
 
 for layer in model.layers[:-2]:
     x = np.array(layer.get_weights()).ndim
+    x1 = np.array(layer.get_weights()).shape
     array = np.array(layer.get_weights())
     if (model_name != resnet50) or (model_name != vgg16):
         if (len(array) > 0) and (x > 2):
