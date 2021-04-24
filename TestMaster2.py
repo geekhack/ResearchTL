@@ -7,8 +7,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras import layers, losses, optimizers
 from tensorflow.python.keras.models import Sequential
-from tensorflow.keras.applications.resnet50 import ResNet50 as resnet50
-from tensorflow.keras.applications.vgg16 import VGG16 as vgg16
+from tensorflow.keras.applications.resnet50 import ResNet50
 import matplotlib.pyplot as plt
 from tensorflow.keras import backend as k
 
@@ -155,13 +154,12 @@ from tensorflow.keras import backend as k
 #
 # # then evaluate the model
 # model.evaluate(validation_dataset, batch_size=32, verbose=2)
-model_name=resnet50
 input_t = keras.Input(shape=(224, 224, 3))
-model = model_name(include_top=False,
+res_model = ResNet50(include_top=False,
                      weights="imagenet",
                      input_tensor=input_t)
 
-for i in range(len(model.layers[2].get_weights()[0])):
+for i in range(len(res_model.layers[2].get_weights()[0])):
     # print("weight is")
     # print(res_model.layers[2].get_weights()[0][i])
     print("weights")
@@ -186,8 +184,8 @@ for i in range(len(model.layers[2].get_weights()[0])):
 
         ##################################1st feature in this layer 2 within the third channel of RGB######
         # return all the positive values in the convolutional feature..in the first channel
-        for x in range(len(model.layers[2].get_weights()[0][i])):
-            x1 = np.array(model.layers[2].get_weights()[0][i][x]) > 0
+        for x in range(len(res_model.layers[2].get_weights()[0][i])):
+            x1 = np.array(res_model.layers[2].get_weights()[0][i][x]) > 0
             #print(x1[2])
             for a in range(len(x1)):
 
