@@ -17,8 +17,8 @@ model = model_name(include_top=False,
 
 # get the layer index
 def getLayerIndex(model_i, layer_name):
-    for pos, layer in enumerate(model_i.layers):
-        if layer.name == layer_name:
+    for pos, layer_g in enumerate(model_i.layers):
+        if layer_g.name == layer_name:
             return pos
 
 
@@ -49,6 +49,12 @@ for c_layer in range(len(convolved_layers)):
     print("*******START LAYER: "+ str(convolved_layers[c_layer])+ " **************** ")
     print("Batches:" + str(len(model.layers[convolved_layers[c_layer]].get_weights()[0])));
     print("Layer output size: " + str(model.layers[convolved_layers[c_layer]].get_weights()[0].shape))
+
+    #create array for array matrices,feature values and convolved values for each layer
+    layer_array_matrices = []
+    layer_feature_sums = []
+    layer_convolved_values_sum = []
+
     #get the arrays matrices(batches) pixel
     for i in range(len(model.layers[convolved_layers[c_layer]].get_weights()[0])):
         # get the values for each feature
@@ -58,7 +64,9 @@ for c_layer in range(len(convolved_layers)):
             x1 = np.array(model.layers[convolved_layers[c_layer]].get_weights()[0][i][x]) > 0
             # get the values for each channel
             for a in range(len(x1)):
-                print("Pixel(matrix position): " + str(a + 1) + " Feature Map item: " + str(x + 1)+" Array: "+str(i+1)+" of "+str(len(model.layers[convolved_layers[c_layer]].get_weights()[0])))
-                print("+ve image convolved values at position:" + str(a))
-                print(sum(x1[a]))
+                #print("Pixel(matrix position): " + str(a + 1) + " Feature Map item: " + str(x + 1)+" Array: "+str(i+1)+" of "+str(len(model.layers[convolved_layers[c_layer]].get_weights()[0])))
+                #print("+ve image convolved values at position:" + str(a))
+                #get the positive values ready to be passed through activation function for feature map
+                value_pix = sum(x1[a])
+                print(value_pix)
     print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")

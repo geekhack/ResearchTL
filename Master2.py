@@ -180,7 +180,7 @@ model.add(layers.Dense(2, activation='softmax'))
 model.compile(loss=losses.SparseCategoricalCrossentropy(from_logits=True),
               optimizer=optimizers.Adam(lr=3e-4),
               metrics=['accuracy'])
-history = model.fit(training_dataset, batch_size=32, epochs=5, verbose=1)
+history = model.fit(training_dataset, batch_size=32, epochs=10, verbose=1)
 
 
 # create a method for prediction

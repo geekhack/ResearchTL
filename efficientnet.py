@@ -4,12 +4,14 @@ from tensorflow.keras.applications.efficientnet import EfficientNetB1 as efficie
 from tensorflow.keras.applications.resnet50 import ResNet50 as resnet50
 from tensorflow.keras.applications.vgg16 import VGG16 as vgg16
 
-model_name=efficient
+model_name = efficient
 input_t = keras.Input(shape=(224, 224, 3))
 model = model_name(include_top=False,
-                     weights="imagenet",
-                     input_tensor=input_t)
-#print(res_model.summary())
+                   weights="imagenet",
+                   input_tensor=input_t)
+
+
+# print(res_model.summary())
 # get the layer index
 def getLayerIndex(model, layer_name):
     for pos, layer in enumerate(model.layers):
