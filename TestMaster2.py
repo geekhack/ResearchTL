@@ -159,9 +159,13 @@ res_model = ResNet50(include_top=False,
                      weights="imagenet",
                      input_tensor=input_t)
 
-for i in range(len(res_model.layers[2].get_weights()[0])):
+# get the total number of weights in the array
+total_layer_weights = 0
+sum_positives = 0
+sum_negatives = 0
+for i in range(len(res_model.layers[7].get_weights()[0])):
     # print("weight is")
-    # print(res_model.layers[2].get_weights()[0][i])
+    #print(res_model.layers[2].get_weights()[0].shape)
     print("weights")
     if (i == 1):
         #returns the first feature in the convolution with its 3 channels
@@ -183,13 +187,28 @@ for i in range(len(res_model.layers[2].get_weights()[0])):
 ##############end of the channel1###############################################################
 
         ##################################1st feature in this layer 2 within the third channel of RGB######
-        # return all the positive values in the convolutional feature..in the first channel
-        for x in range(len(res_model.layers[2].get_weights()[0][i])):
-            x1 = np.array(res_model.layers[2].get_weights()[0][i][x]) > 0
+
+        for x in range(len(res_model.layers[10].get_weights()[0][i])):
+            # return all the values in the convolutional feature
+            total_array = np.array(res_model.layers[10].get_weights()[0][i][x])
+            # return all the negative values in the convolutional feature
+            x2 = np.array(res_model.layers[10].get_weights()[0][i][x]) < 0
+            for c in range(len(x2)):
+
+                print("all the trues in depth: "+str(c+1)+" are for feature: " + str(x+1))
+                sum_negatives += sum(x2[c])
+                print(sum(x2[c]))
+
+            for y in range(len(total_array)):
+                total_layer_weights += len(total_array[y])
+
+            # return all the positive values in the convolutional feature
+            x1 = np.array(res_model.layers[10].get_weights()[0][i][x]) > 0
             #print(x1[2])
             for a in range(len(x1)):
 
-                print("all the trues in channel"+str(a+1)+" are for feature " + str(x+1))
+                print("all the trues in depth: "+str(a+1)+" are for feature: " + str(x+1))
+                sum_positives += sum(x1[a])
                 print(sum(x1[a]))
             ##############end of the channel1###############################################################
             #get the total number of features in the covolution
@@ -197,6 +216,13 @@ for i in range(len(res_model.layers[2].get_weights()[0])):
             #print(len(res_model.layers[2].get_weights()[0][i]))
     else:
         print("order:")
+
+
+print("total weights for layer:"+str(total_layer_weights))
+print("total positives:"+str(sum_positives))
+print("total negatives:"+str(sum_negatives))
+layer_pos_prob = sum_positives / total_layer_weights
+print("probability: " + str(layer_pos_prob))
     # print("output shape is")
     # print(res_model.layers[2].output_shape)
     #
