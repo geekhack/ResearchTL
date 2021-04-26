@@ -8,6 +8,7 @@ from tensorflow.keras.applications.vgg16 import VGG16 as vgg16
 import matplotlib.pyplot as plt
 from tensorflow.keras import backend as k
 from collections import defaultdict
+import statistics as stats
 
 model_name = resnet50
 input_t = keras.Input(shape=(224, 224, 3))
@@ -50,6 +51,9 @@ sum_negatives = 0
 
 # create a dictionary with layer index and positive values identified
 layer_positives_dict = defaultdict(list)
+
+# create a dictionary for storing the layers and their +ve values probabilities
+layer_probs_dict = defaultdict(list)
 
 # list the convolved layers
 for c_layer in range(len(convolved_layers)):
@@ -103,14 +107,34 @@ for c_layer in range(len(convolved_layers)):
     # create +ves values array
     positives_array = []
     for key, val in layer_positives_dict.items():
-        print(key, "corresponds to:", val)
+        # print(key, "corresponds to:",val," positive values")
         positives_array.append(val)
+        ###used with softmax values
+        # print(key, "corresponds to:", float(val))
+        # positives_array.append(float(val))
+        ###end of usage with softmax
         # create an array of positives and then use the softmax to get their distribution
         # probability
 
-    #get the softmax values
-    p = tf.nn.softmax(positives_array)
-    print(p)
+    # get the softmax values
+    # p = tf.nn.softmax(positives_array)
+    # print(p)
+    list_layer_probs = []
+    list_layer_probs.append((str(convolved_layers[c_layer]), layer_pos_prob))
+    layer_probs_dict.update(list_layer_probs)
 
-    ####print(str(convolved_layers[c_layer]) + " probability: " + str(layer_pos_prob))
-    ##print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")
+    # loop through the layer_probs_dictionary
+    for lyr, val in layer_probs_dict.items():
+        print(lyr, "Layer prob:", val)
+
+#get the median number of layers to ensure the first layers deal with the feature extraction
+median_layer = stats.median(len(convolved_layers))
+print(median_layer)edrfds
+
+
+#loop through the layers and print those layers above the median
+for e in range(len(convolved_layers)):
+    if e > median_layer
+
+    # print(str(convolved_layers[c_layer]) + " probability: " + str(layer_pos_prob))
+    # print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")
