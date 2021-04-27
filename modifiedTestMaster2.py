@@ -127,14 +127,38 @@ for c_layer in range(len(convolved_layers)):
     for lyr, val in layer_probs_dict.items():
         print(lyr, "Layer prob:", val)
 
-#get the median number of layers to ensure the first layers deal with the feature extraction
-median_layer = stats.median(len(convolved_layers))
-print(median_layer)edrfds
+# get the median number of layers to ensure the first layers deal with the feature extraction
 
+median_layer = stats.median(convolved_layers)
 
-#loop through the layers and print those layers above the median
-for e in range(len(convolved_layers)):
-    if e > median_layer
+# create dictionary for storing selected median layers
+second_layer_probs_dict = defaultdict(list)
+# store the new list of layers to be matched with the mean probability
+second_half_layers = []
 
-    # print(str(convolved_layers[c_layer]) + " probability: " + str(layer_pos_prob))
-    # print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")
+# store all probabilities for the selected upper half layers
+second_half_probs = []
+# loop through the layers and print those layers above the median
+for lyr, val in layer_probs_dict.items():
+    # print(lyr, "Layer prob:", val)
+    if int(lyr) > median_layer:
+        # store the probabilities of the upper half selected convolved layers
+        print(lyr, "Layer prob:", val)
+        # update the sum of selected layers probabilities
+        second_half_probs.append(val)
+        second_half_layers.append((lyr, val))
+        second_layer_probs_dict.update(second_half_layers)
+
+# get the mean of the layers
+selected_layers_mean = stats.mean(second_half_probs)
+final_selected_layers = []
+# now get the final layers list whose value exceed the mean
+for s_lyr, v in second_layer_probs_dict.items():
+    # print(lyr, "Layer prob:", val)
+    if v > selected_layers_mean:
+        # store the probabilities of the upper half selected convolved layers
+        final_selected_layers.append(s_lyr)
+
+# print(second_half_layers)
+# print(str(convolved_layers[c_layer]) + " probability: " + str(layer_pos_prob))
+# print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")
