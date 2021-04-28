@@ -221,12 +221,12 @@ for s_lyr, v in second_layer_probs_dict.items():
 
 # use the selected layers
 for sb_layer in model.layers[:-2]:
-    #sb_layer.trainable = False
-    index = getLayerIndex(model, sb_layer.name)
-    for b in final_selected_layers:
-        if b == index:
-            sb_layer.trainable = True
-            print(str(sb_layer.name) + " and index is"+str(b))
+    sb_layer.trainable = False
+    # index = getLayerIndex(model, sb_layer.name)
+    # for b in final_selected_layers:
+    #     if b == index:
+    #         sb_layer.trainable = True
+    #         print(str(sb_layer.name) + " and index is"+str(b))
 
 
 # try the transfer learning model
