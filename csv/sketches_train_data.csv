@@ -1,0 +1,251 @@
+label,file,class_id
+airplane,airplane/9.png,1
+alarm clock,alarm clock/99.png,2
+angel,angel/240.png,3
+ant,ant/320.png,4
+apple,apple/400.png,5
+arm,arm/480.png,6
+armchair,armchair/560.png,7
+ashtray,ashtray/640.png,8
+axe,axe/720.png,9
+backpack,backpack/800.png,10
+banana,banana/880.png,11
+barn,barn/960.png,12
+baseball bat,baseball bat/999.png,13
+basket,basket/1120.png,14
+bathtub,bathtub/1200.png,15
+bear (animal),bear (animal)/1280.png,16
+bed,bed/1360.png,17
+bee,bee/1440.png,18
+beer-mug,beer-mug/1520.png,19
+bell,bell/1600.png,20
+bench,bench/1680.png,21
+bicycle,bicycle/1760.png,22
+binoculars,binoculars/1840.png,23
+blimp,blimp/1920.png,24
+book,book/2000.png,25
+bookshelf,bookshelf/2080.png,26
+boomerang,boomerang/2160.png,27
+bottle opener,bottle opener/2240.png,28
+bowl,bowl/2320.png,29
+brain,brain/2400.png,30
+bread,bread/2480.png,31
+bridge,bridge/2560.png,32
+bulldozer,bulldozer/2640.png,33
+bus,bus/2720.png,34
+bush,bush/2800.png,35
+butterfly,butterfly/2880.png,36
+cabinet,cabinet/2960.png,37
+cactus,cactus/3040.png,38
+cake,cake/3120.png,39
+calculator,calculator/3200.png,40
+camel,camel/3280.png,41
+camera,camera/3360.png,42
+candle,candle/3440.png,43
+cannon,cannon/3520.png,44
+canoe,canoe/3600.png,45
+car (sedan),car (sedan)/3680.png,46
+carrot,carrot/3760.png,47
+castle,castle/3840.png,48
+cat,cat/3920.png,49
+cell phone,cell phone/4000.png,50
+chair,chair/4080.png,51
+chandelier,chandelier/4160.png,52
+church,church/4240.png,53
+cigarette,cigarette/4320.png,54
+cloud,cloud/4400.png,55
+comb,comb/4480.png,56
+computer monitor,computer monitor/4560.png,57
+computer-mouse,computer-mouse/4640.png,58
+couch,couch/4720.png,59
+cow,cow/4800.png,60
+crab,crab/4880.png,61
+crane (machine),crane (machine)/4960.png,62
+crocodile,crocodile/5040.png,63
+crown,crown/5120.png,64
+cup,cup/5200.png,65
+diamond,diamond/5280.png,66
+dog,dog/5360.png,67
+dolphin,dolphin/5440.png,68
+donut,donut/5520.png,69
+door,door/5600.png,70
+door handle,door handle/5680.png,71
+dragon,dragon/5760.png,72
+duck,duck/5840.png,73
+ear,ear/5920.png,74
+elephant,elephant/6000.png,75
+envelope,envelope/6080.png,76
+eye,eye/6160.png,77
+eyeglasses,eyeglasses/6240.png,78
+face,face/6320.png,79
+fan,fan/6400.png,80
+feather,feather/6480.png,81
+fire hydrant,fire hydrant/6560.png,82
+fish,fish/6640.png,83
+flashlight,flashlight/6720.png,84
+floor lamp,floor lamp/6800.png,85
+flower with stem,flower with stem/6880.png,86
+flying bird,flying bird/6960.png,87
+flying saucer,flying saucer/7040.png,88
+foot,foot/7120.png,89
+fork,fork/7200.png,90
+frog,frog/7280.png,91
+frying-pan,frying-pan/7360.png,92
+giraffe,giraffe/7440.png,93
+grapes,grapes/7520.png,94
+grenade,grenade/7600.png,95
+guitar,guitar/7680.png,96
+hamburger,hamburger/7760.png,97
+hammer,hammer/7840.png,98
+hand,hand/7920.png,99
+harp,harp/8000.png,100
+hat,hat/8080.png,101
+head,head/8160.png,102
+head-phones,head-phones/8240.png,103
+hedgehog,hedgehog/8320.png,104
+helicopter,helicopter/8400.png,105
+helmet,helmet/8480.png,106
+horse,horse/8560.png,107
+hot air balloon,hot air balloon/8640.png,108
+hot-dog,hot-dog/8720.png,109
+hourglass,hourglass/8800.png,110
+house,house/8880.png,111
+human-skeleton,human-skeleton/8960.png,112
+ice-cream-cone,ice-cream-cone/9040.png,113
+ipod,ipod/9120.png,114
+kangaroo,kangaroo/9200.png,115
+key,key/9280.png,116
+keyboard,keyboard/9360.png,117
+knife,knife/9440.png,118
+ladder,ladder/9520.png,119
+laptop,laptop/9600.png,120
+leaf,leaf/9680.png,121
+lightbulb,lightbulb/9760.png,122
+lighter,lighter/9840.png,123
+lion,lion/9920.png,124
+lobster,lobster/9999.png,125
+loudspeaker,loudspeaker/10080.png,126
+mailbox,mailbox/10160.png,127
+megaphone,megaphone/10240.png,128
+mermaid,mermaid/10320.png,129
+microphone,microphone/10400.png,130
+microscope,microscope/10480.png,131
+monkey,monkey/10560.png,132
+moon,moon/10640.png,133
+mosquito,mosquito/10720.png,134
+motorbike,motorbike/10800.png,135
+mouse (animal),mouse (animal)/10880.png,136
+mouth,mouth/10960.png,137
+mug,mug/11040.png,138
+mushroom,mushroom/11120.png,139
+nose,nose/11200.png,140
+octopus,octopus/11280.png,141
+owl,owl/11360.png,142
+palm tree,palm tree/11440.png,143
+panda,panda/11520.png,144
+paper clip,paper clip/11600.png,145
+parachute,parachute/11680.png,146
+parking meter,parking meter/11760.png,147
+parrot,parrot/11840.png,148
+pear,pear/11920.png,149
+pen,pen/12000.png,150
+penguin,penguin/12080.png,151
+person sitting,person sitting/12160.png,152
+person walking,person walking/12240.png,153
+piano,piano/12320.png,154
+pickup truck,pickup truck/12400.png,155
+pig,pig/12480.png,156
+pigeon,pigeon/12560.png,157
+pineapple,pineapple/12640.png,158
+pipe (for smoking),pipe (for smoking)/12720.png,159
+pizza,pizza/12800.png,160
+potted plant,potted plant/12880.png,161
+power outlet,power outlet/12960.png,162
+present,present/13040.png,163
+pretzel,pretzel/13120.png,164
+pumpkin,pumpkin/13200.png,165
+purse,purse/13280.png,166
+rabbit,rabbit/13360.png,167
+race car,race car/13440.png,168
+radio,radio/13520.png,169
+rainbow,rainbow/13600.png,170
+revolver,revolver/13680.png,171
+rifle,rifle/13760.png,172
+rollerblades,rollerblades/13840.png,173
+rooster,rooster/13920.png,174
+sailboat,sailboat/14000.png,175
+santa claus,santa claus/14080.png,176
+satellite,satellite/14160.png,177
+satellite dish,satellite dish/14240.png,178
+saxophone,saxophone/14320.png,179
+scissors,scissors/14400.png,180
+scorpion,scorpion/14480.png,181
+screwdriver,screwdriver/14560.png,182
+sea turtle,sea turtle/14640.png,183
+seagull,seagull/14720.png,184
+shark,shark/14800.png,185
+sheep,sheep/14880.png,186
+ship,ship/14960.png,187
+shoe,shoe/15040.png,188
+shovel,shovel/15120.png,189
+skateboard,skateboard/15200.png,190
+skull,skull/15280.png,191
+skyscraper,skyscraper/15360.png,192
+snail,snail/15440.png,193
+snake,snake/15520.png,194
+snowboard,snowboard/15600.png,195
+snowman,snowman/15680.png,196
+socks,socks/15760.png,197
+space shuttle,space shuttle/15840.png,198
+speed-boat,speed-boat/15920.png,199
+spider,spider/16000.png,200
+sponge bob,sponge bob/16080.png,201
+spoon,spoon/16160.png,202
+squirrel,squirrel/16240.png,203
+standing bird,standing bird/16320.png,204
+stapler,stapler/16400.png,205
+strawberry,strawberry/16480.png,206
+streetlight,streetlight/16560.png,207
+submarine,submarine/16640.png,208
+suitcase,suitcase/16720.png,209
+sun,sun/16800.png,210
+suv,suv/16880.png,211
+swan,swan/16960.png,212
+sword,sword/17040.png,213
+syringe,syringe/17120.png,214
+t-shirt,t-shirt/17200.png,215
+table,table/17280.png,216
+tablelamp,tablelamp/17360.png,217
+teacup,teacup/17440.png,218
+teapot,teapot/17520.png,219
+teddy-bear,teddy-bear/17600.png,220
+telephone,telephone/17680.png,221
+tennis-racket,tennis-racket/17760.png,222
+tent,tent/17840.png,223
+tiger,tiger/17920.png,224
+tire,tire/18000.png,225
+toilet,toilet/18080.png,226
+tomato,tomato/18160.png,227
+tooth,tooth/18240.png,228
+toothbrush,toothbrush/18320.png,229
+tractor,tractor/18400.png,230
+traffic light,traffic light/18480.png,231
+train,train/18560.png,232
+tree,tree/18640.png,233
+trombone,trombone/18720.png,234
+trousers,trousers/18800.png,235
+truck,truck/18880.png,236
+trumpet,trumpet/18960.png,237
+tv,tv/19040.png,238
+umbrella,umbrella/19120.png,239
+van,van/19200.png,240
+vase,vase/19280.png,241
+violin,violin/19360.png,242
+walkie talkie,walkie talkie/19440.png,243
+wheel,wheel/19520.png,244
+wheelbarrow,wheelbarrow/19600.png,245
+windmill,windmill/19680.png,246
+wine-bottle,wine-bottle/19760.png,247
+wineglass,wineglass/19840.png,248
+wrist-watch,wrist-watch/19920.png,249
+zebra,zebra/20000.png,250
