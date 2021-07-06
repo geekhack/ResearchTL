@@ -35,7 +35,7 @@ def saveTrainingFileNames(img_list):
         upd_dictionary.update(selected_images)
 
     # write to the json file with the updated dictionary
-    with open('json/selected_training_images.json', 'w', encoding='utf8') as outfile:
+    with open('json/selected_cubs_training_images.json', 'w', encoding='utf8') as outfile:
         str_ = json.dumps(cleanDictionary(upd_dictionary),
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
@@ -54,7 +54,7 @@ def saveValidationFileNames(img_list):
         upd_dictionary.update(selected_images)
 
     # write to the json file with the updated dictionary
-    with open('json/selected_validation_images.json', 'w', encoding='utf8') as outfile:
+    with open('json/selected_cubs_training_images.json', 'w', encoding='utf8') as outfile:
         str_ = json.dumps(cleanDictionary(upd_dictionary),
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
@@ -78,7 +78,7 @@ def cleanDictionary(dictry):
 # setup the delete functionality of details from the json training file###################################
 def deleteTrainingFileContents():
     # in case the json file has some data,clear it to accomodate the data acquired from the new reading
-    with open('json/selected_training_images.json', 'w', encoding='utf-8') as json_file:
+    with open('json/selected_cubs_training_images.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
         json_file.close()
     # end of clearing the file contents
@@ -87,7 +87,7 @@ def deleteTrainingFileContents():
 # setup the delete functionality of details from the json training file###################################
 def deleteValidationFileContents():
     # in case the json file has some data,clear it to accomodate the data acquired from the new reading
-    with open('json/selected_validation_images.json', 'w', encoding='utf-8') as json_file:
+    with open('json/selected_cubs_training_images.json', 'w', encoding='utf-8') as json_file:
         json_file.truncate()
         json_file.close()
     # end of clearing the file contents
@@ -100,7 +100,7 @@ def deleteValidationFileContents():
 # overfitting
 
 #############################setup the training function #######################################################
-def imageProcessing(query_image, training_image, imageName, xx, label):
+def imageProcessing(query_image, training_image, imageName, xx, label,lbl_id):
     # create a dictionary to return image and its label
     image_label = {}
 
@@ -138,7 +138,7 @@ def imageProcessing(query_image, training_image, imageName, xx, label):
             good.append([m])
 
     if len(good) > 950:
-        image_label = {label: label + '/' + imageName}
+        image_label = {label + ":" + str(lbl_id): label + '/' + imageName}
         resultMsg = 'there are %d good matches ' % (len(good)) + 'for image ' + imageName + ' with for ' + xx + 'for ' \
                                                                                                                 'label:' + label
         # print(resultMsg)
@@ -153,20 +153,22 @@ def sortTrainImages():
     # get the class labels from training datasets
     p = []
     #data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
-    data_path = './Data'
+    data_path = './Data4'
     img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
     labels = img_gen.flow_from_directory(data_path + '/train')
     train_labels = labels.class_indices.keys()
 
+    lbl_id = 0
     for lbl in train_labels:
+        lbl_id = lbl_id +1
         # my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/train/' + lbl
-        my_path = './Data/train/' + lbl  # images from the imagenet source
+        my_path = './Data4/train/' + lbl  # images from the imagenet source
         only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
         images = np.empty(len(only_files), dtype=object)
 
         # set the parameters for the matching feature images
         #resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
-        resnet_path = './RefImages'
+        resnet_path = './Refcubs'
         p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
         pests_images = np.empty(len(p_files), dtype=object)
 
@@ -186,8 +188,10 @@ def sortTrainImages():
                         images[n] = cv2.imread(join(my_path, only_files[n]))
                         # get the name of the image
                         imageName = only_files[n]
+
+                        print("imagegani", imageName)
                         # then perform some orb on the image at position n
-                        p.append(imageProcessing(query_img, images[n], imageName, p_files[s], lbl))
+                        p.append(imageProcessing(query_img, images[n], imageName, p_files[s], lbl, lbl_id))
 
                 break
     return p
@@ -195,61 +199,11 @@ def sortTrainImages():
 
 #######################################end of reading images from training folder################################################
 
-######################################read the images to feature match from folder####################################################
-# use the images from resnet(source) to feature match those for others(in Data folder
-# e.g. pests,dogs and cats etc
-def sortValidationImages():
-    # set the parameters for the training data
-    # get the class labels from training datasets
-    v = []
-    #data_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data'
-    data_path = './Data'
-    img_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1. / 255, rotation_range=20)
-    labels = img_gen.flow_from_directory(data_path + '/validate')
-    train_labels = labels.class_indices.keys()
-
-    for lbl in train_labels:
-        # my_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/Data/validate/' + lbl  # images from the imagenet source
-        my_path = './Data/validate/' + lbl
-        only_files = [f for f in listdir(my_path) if isfile(join(my_path, f))]
-        images = np.empty(len(only_files), dtype=object)
-
-        # set the parameters for the matching feature images
-        #resnet_path = 'D:/pycharmProjects/ResearchTL/ResearchTL/RefImages'
-        resnet_path = './RefImages'
-        p_files = [f for f in listdir(resnet_path) if isfile(join(resnet_path, f))]
-        pests_images = np.empty(len(p_files), dtype=object)
-
-        for m in range(0, len(p_files)):
-            deleteValidationFileContents()
-            ##############read all the other images from the folder##################################
-            pests_images[m] = cv2.imread(join(resnet_path, p_files[m]))
-            # get the name of the image
-            imageName_x = p_files[m]
-            # execute the loop once to avoid execution of the outer loop in the inner loop
-            if m == 1:
-                for s in range(0, len(p_files)):
-
-                    for n in range(0, len(only_files)):
-                        query_img = cv2.imread(resnet_path + '/' + p_files[s])
-                        # ##############read all the other images from the folder##################################
-                        images[n] = cv2.imread(join(my_path, only_files[n]))
-                        # get the name of the image
-                        imageName = only_files[n]
-                        # then perform some orb on the image at position n
-                        v.append(imageProcessing(query_img, images[n], imageName, p_files[s], lbl))
-
-                break
-    return v
-
-
-#######################################end of reading images from training folder################################################
 
 
 # then call the save method
 # get the class items
 new_selected_images = sortTrainImages()
-
 updated_new_selected_images = []
 for val in new_selected_images:
     if val != None:
@@ -259,26 +213,13 @@ saveTrainingFileNames(updated_new_selected_images)
 
 ##################################end of writing images into json file############################################
 
-# then call the save method
-# get the class items
-new_validation_selected_images = sortValidationImages()
-
-updated_new_validation_selected_images = []
-for val in new_validation_selected_images:
-    if val != None:
-        updated_new_validation_selected_images.append(val)
-
-saveValidationFileNames(updated_new_validation_selected_images)
-
-
-##################################end of writing images into json file############################################
 
 # once the images have been written,read them and develop a dataset for use in the model##########################
 # first display the data in the dictionary
 # load the json file
 
 def getSelectedTrainingImages():
-    with open('json/selected_training_images.json') as selected_images_file:
+    with open('json/selected_cubs_training_images.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         images_array = []
         for o in s_data:
@@ -291,27 +232,10 @@ def getSelectedTrainingImages():
             x.append(list(d.values()))
 
         df = pd.DataFrame(x)
-        df.columns = ['label', 'file']
-        df.to_csv('csv/train_data.csv', index=False)
+        df.columns = ['label', 'file', 'class_id']
+        df.to_csv('csv/cubs_train_data.csv', index=False)
 
 
 # once the images have been written,read them and develop a dataset for use in the model##########################
 # first display the data in the dictionary
 # load the json file
-
-def getSelectedValidationImages():
-    with open('json/selected_validation_images.json') as selected_validation_images_file:
-        s_data = json.load(selected_validation_images_file)
-        images_array = []
-        for o in s_data:
-            for p in s_data[o]:
-                dic_toy = {'label': o, 'file': p}
-                images_array.append(dic_toy)
-
-        x = []
-        for d in images_array:
-            x.append(list(d.values()))
-
-        df = pd.DataFrame(x)
-        df.columns = ['label', 'file']
-        df.to_csv('csv/validation_data.csv', index=False)

@@ -58,7 +58,7 @@ for key, value in class_names.items():
 
 for _ in range(len(training_dataset.filenames)):
     image, label = training_dataset.next()
-    print(new_dict[label[0]])
+    ###print(new_dict[label[0]])
     # display the image from the iterator
     # plt.imshow(image[0])
     # label_name=new_dict[label[0]] # note you are only showing the first image of the batch
@@ -137,6 +137,7 @@ for c_layer in range(len(convolved_layers)):
             for c in range(len(x2)):
                 ###print("all the trues in depth: " + str(c + 1) + " are for feature: " + str(x + 1))
                 sum_negatives += sum(x2[c])
+
                 # print(sum(x2[c]))
             # return all the values
             for y in range(len(total_array)):
@@ -153,12 +154,41 @@ for c_layer in range(len(convolved_layers)):
                 sum_positives += value_pix
 
                 ######print(value_pix)
+    # print("total negatives:" + str(sum_negatives) + " for layer:" + str(convolved_layers[c_layer]))
+    #
+    # print("total positives:" + str(sum_positives) + " for layer:" + str(convolved_layers[c_layer]))
+
+    # get the layer whose positives are higher
+    diff = 0
+    if sum_positives > sum_negatives:
+        #print("****higher positive****")
+        #print(str(convolved_layers[c_layer]))
+        dif = sum_positives -sum_negatives;
+        #print("difference"+str(sum_positives -sum_negatives))
+        #print(str(convolved_layers[c_layer])+ "positive:"+str(sum_positives)+"negative:"+str(sum_negatives))
+        #print("total:"+str(total_layer_weights))
+        prob_positive = abs(dif/total_layer_weights) ;
+        #print(str("probability on positive difference:")+str(prob_positive))
+
+        print(str(prob_positive)+"_"+str(convolved_layers[c_layer]))
+    elif sum_negatives > sum_positives:
+        #print("****higher negative****")
+        #print(str(convolved_layers[c_layer]))
+        #print("difference"+str(sum_negatives - sum_positives))
+        #print(str(convolved_layers[c_layer]) + "positive:" + str(sum_positives) + "negative:" + str(sum_negatives))
+        #print("total:" + str(total_layer_weights))
+        dif = sum_negatives - sum_positives ;
+        #prob_positive = abs(dif / sum_positives);
+        prob_negative = abs(dif / total_layer_weights);
+        #print(str("probability on negative difference:") + str(prob_negative))
+        print(str(prob_negative)+"_"+str(convolved_layers[c_layer]))
+
     list_sums = []
-    list_sums.append((str(convolved_layers[c_layer]), sum_positives))
+    list_sums.append((str(convolved_layers[c_layer]), sum_negatives))
     layer_positives_dict.update(list_sums)
 
     # print the probabilities for each layer
-    layer_pos_prob = sum_positives / total_layer_weights
+    layer_pos_prob = sum_negatives / total_layer_weights
 
     # create +ves values array
     positives_array = []
@@ -180,8 +210,8 @@ for c_layer in range(len(convolved_layers)):
     layer_probs_dict.update(list_layer_probs)
 
     # loop through the layer_probs_dictionary
-    for lyr, val in layer_probs_dict.items():
-        print(lyr, "Layer prob:", val)
+    #####*********for lyr, val in layer_probs_dict.items():
+         ##################**************print(lyr, "Layer prob:", val)
 
 # get the median number of layers to ensure the first layers deal with the feature extraction
 
@@ -199,7 +229,7 @@ for lyr, val in layer_probs_dict.items():
     # print(lyr, "Layer prob:", val)
     if int(lyr) > median_layer:
         # store the probabilities of the upper half selected convolved layers
-        print(lyr, "Layer prob:", val)
+           #########******print(lyr, "Layer prob:", val)
         # update the sum of selected layers probabilities
         second_half_probs.append(val)
         second_half_layers.append((lyr, val))
@@ -210,8 +240,8 @@ selected_layers_mean = stats.mean(second_half_probs)
 final_selected_layers = []
 # now get the final layers list whose value exceed the mean
 for s_lyr, v in second_layer_probs_dict.items():
-    # get the probabilities that are lower than the mean probability
-    if v < selected_layers_mean:
+    # print(lyr, "Layer prob:", val)
+    #if v > selected_layers_mean:
         # store the probabilities of the upper half selected convolved layers
         final_selected_layers.append(s_lyr)
 
@@ -221,12 +251,13 @@ for s_lyr, v in second_layer_probs_dict.items():
 
 # use the selected layers
 for sb_layer in model.layers[:-2]:
-    # sb_layer.trainable = False
+    #sb_layer.trainable = False
     index = getLayerIndex(model, sb_layer.name)
     for b in final_selected_layers:
         if b == index:
             sb_layer.trainable = True
-            print(str(sb_layer.name) + " and index is" + str(b))
+            ##########****print(str(sb_layer.name) + " and index is"+str(b))
+
 
 # try the transfer learning model
 to_res = (224, 224)
@@ -247,44 +278,44 @@ t_model.add(layers.BatchNormalization())
 t_model.add(layers.Dense(2, activation='softmax'))
 
 t_model.compile(loss=losses.SparseCategoricalCrossentropy(from_logits=True),
-                optimizer=optimizers.Adam(lr=3e-4),
-                metrics=['accuracy'])
-history = t_model.fit(training_dataset, batch_size=32, epochs=10, verbose=1)
-
-
-# create a method for prediction
-# load and prepare the image
-def load_image(filename):
-    # load the image
-    img = load_img(filename, target_size=(224, 224))
-    # convert to array
-    img = img_to_array(img)
-    # reshape into a single sample with 3 channels
-    img = img.reshape(1, 224, 224, 3)
-    # center pixel data
-    img = img.astype('float32')
-    img = img - [123.68, 116.779, 103.939]
-    return img
-
-
-print("prediction with the test data")
-t_model.evaluate(validation_dataset, batch_size=32, verbose=2)
-
-# do some prediction
-probability_model = Sequential([t_model, layers.Softmax()])
-
-print("see the results for an image")
-# load the image
-images_array = ['bike_242.bmp', 'carsgraz_253.bmp', 'bike_247.bmp', 'bike_244.bmp'];
-
-for i in range(len(images_array)):
-    image1 = load_image(images_array[i])
-    predictions = probability_model.predict(image1)
-
-    print("The prediction class for:" + images_array[i] + " is:")
-    predicted_class_indices = np.argmax(predictions, axis=1)
-    training_labels = training_dataset.class_indices
-    labels = dict((v, k) for k, v in training_labels.items())
-    predictions_y = [labels[k] for k in predicted_class_indices]
-
-    print(predictions_y)
+              optimizer=optimizers.Adam(lr=3e-4),
+              metrics=['accuracy'])
+# ###history = t_model.fit(training_dataset, batch_size=32, epochs=10, verbose=1)
+#
+# # create a method for prediction
+# # load and prepare the image
+# def load_image(filename):
+#     # load the image
+#     img = load_img(filename, target_size=(224, 224))
+#     # convert to array
+#     img = img_to_array(img)
+#     # reshape into a single sample with 3 channels
+#     img = img.reshape(1, 224, 224, 3)
+#     # center pixel data
+#     img = img.astype('float32')
+#     img = img - [123.68, 116.779, 103.939]
+#     return img
+#
+#
+# print("prediction with the test data")
+# t_model.evaluate(validation_dataset, batch_size=32, verbose=2)
+#
+# #do some prediction
+# probability_model = Sequential([t_model, layers.Softmax()])
+#
+# print("see the results for an image")
+# # load the image
+# images_array=['bike_242.bmp','carsgraz_253.bmp','bike_247.bmp','bike_244.bmp'];
+#
+# for i in range(len(images_array)):
+#
+#     image1 = load_image(images_array[i])
+#     predictions = probability_model.predict(image1)
+#
+#     print("The prediction class for:"+images_array[i]+" is:")
+#     predicted_class_indices = np.argmax(predictions, axis=1)
+#     training_labels = training_dataset.class_indices
+#     labels = dict((v,k) for k,v in training_labels.items())
+#     predictions_y = [labels[k] for k in predicted_class_indices]
+#
+#     print(predictions_y)

@@ -24,7 +24,7 @@ def saveFileNames(img_list):
     # create dictionary for storing the data
     selected_images = {'target_images': img_list}
 
-    with open('selected_training_images.json', 'w', encoding='utf8') as outfile:
+    with open('json/selected_training_images.json', 'w', encoding='utf8') as outfile:
         str_ = json.dumps(cleanDictionary(selected_images),
                           indent=4, sort_keys=True,
                           separators=(',', ': '), ensure_ascii=False)
@@ -48,7 +48,7 @@ def cleanDictionary(dictry):
 # setup the delete functionality of details from the json file###################################
 def deleteFileContents():
     # in case the json file has some data,clear it to accomodate the data acquired from the new reading
-    with open('selected_training_images.json', 'w', encoding='utf8') as json_file:
+    with open('json/selected_training_images.json', 'w', encoding='utf8') as json_file:
         json_file.truncate()
         json_file.close()
     # end of clearing the file contents
@@ -140,7 +140,7 @@ saveFileNames(updated_new_selected_images)
 
 def getSelectedImages():
     s_images=[]
-    with open('selected_training_images.json') as selected_images_file:
+    with open('json/selected_training_images.json') as selected_images_file:
         s_data = json.load(selected_images_file)
         for a in s_data['target_images']:
             s_images.append(a)

@@ -26,8 +26,8 @@ IMG_SIZE = (224, 224)
 train_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 validation_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 
-train_df = pd.read_csv("train_data.csv")
-validation_df = pd.read_csv("validation_data.csv")
+train_df = pd.read_csv("csv/train_data.csv")
+validation_df = pd.read_csv("csv/validation_data.csv")
 
 # generate the datasets(training and validation)
 training_dataset = train_dataset_gen.flow_from_dataframe(dataframe=train_df,
@@ -219,12 +219,12 @@ for s_lyr, v in second_layer_probs_dict.items():
 
 # use the selected layers
 for sb_layer in model.layers[:-2]:
-    # sb_layer.trainable = False
-    index = getLayerIndex(model, sb_layer.name)
-    for b in final_selected_layers:
-        if b == index:
-            sb_layer.trainable = True
-            print(str(sb_layer.name) + " and index is" + str(b))
+    sb_layer.trainable = False
+    # index = getLayerIndex(model, sb_layer.name)
+    # for b in final_selected_layers:
+    #     if b == index:
+    #         sb_layer.trainable = True
+    #         print(str(sb_layer.name) + " and index is" + str(b))
 
 # try the transfer learning model
 to_res = (224, 224)

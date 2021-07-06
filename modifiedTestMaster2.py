@@ -26,8 +26,8 @@ IMG_SIZE = (224, 224)
 train_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 validation_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 
-train_df = pd.read_csv("train_data.csv")
-validation_df = pd.read_csv("validation_data.csv")
+train_df = pd.read_csv("csv/train_data.csv")
+validation_df = pd.read_csv("csv/validation_data.csv")
 
 # generate the datasets(training and validation)
 training_dataset = train_dataset_gen.flow_from_dataframe(dataframe=train_df,
@@ -58,6 +58,7 @@ for key, value in class_names.items():
 
 for _ in range(len(training_dataset.filenames)):
     image, label = training_dataset.next()
+
     print(new_dict[label[0]])
     # display the image from the iterator
     # plt.imshow(image[0])

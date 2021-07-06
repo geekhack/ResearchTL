@@ -22,8 +22,8 @@ IMG_SIZE = (28, 28)
 train_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 validation_dataset_gen = ImageDataGenerator(rescale=1. / 255.)
 
-train_df = pd.read_csv("train_data.csv")
-validation_df = pd.read_csv("validation_data.csv")
+train_df = pd.read_csv("csv/train_data.csv")
+validation_df = pd.read_csv("csv/validation_data.csv")
 
 train_file_paths = train_df['file'].values;
 train_file_labels = train_df['label'].values;

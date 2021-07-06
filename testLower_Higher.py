@@ -210,23 +210,27 @@ selected_layers_mean = stats.mean(second_half_probs)
 final_selected_layers = []
 # now get the final layers list whose value exceed the mean
 for s_lyr, v in second_layer_probs_dict.items():
-    # get the probabilities that are lower than the mean probability
-    if v < selected_layers_mean:
+    # print(lyr, "Layer prob:", val)
+    if v > selected_layers_mean:
         # store the probabilities of the upper half selected convolved layers
         final_selected_layers.append(s_lyr)
 
 # print(second_half_layers)
 # print(str(convolved_layers[c_layer]) + " probability: " + str(layer_pos_prob))
 # print("*******END LAYER: " + str(convolved_layers[c_layer]) + " **************** ")
-
+layer_test_lower = [139,143,146,149,150,155,158,161,165,168,171]
+#layer_test_higher= [88,93,96,99,103,106,109,113,116,119,123,126,129]
+layer_test_higher = [158]
 # use the selected layers
 for sb_layer in model.layers[:-2]:
-    # sb_layer.trainable = False
+    #sb_layer.trainable = False
     index = getLayerIndex(model, sb_layer.name)
-    for b in final_selected_layers:
+    #for b in final_selected_layers:
+    for b in layer_test_higher:
         if b == index:
             sb_layer.trainable = True
-            print(str(sb_layer.name) + " and index is" + str(b))
+            print(str(sb_layer.name) + " and index is"+str(b))
+
 
 # try the transfer learning model
 to_res = (224, 224)
@@ -247,10 +251,9 @@ t_model.add(layers.BatchNormalization())
 t_model.add(layers.Dense(2, activation='softmax'))
 
 t_model.compile(loss=losses.SparseCategoricalCrossentropy(from_logits=True),
-                optimizer=optimizers.Adam(lr=3e-4),
-                metrics=['accuracy'])
+              optimizer=optimizers.Adam(lr=3e-4),
+              metrics=['accuracy'])
 history = t_model.fit(training_dataset, batch_size=32, epochs=10, verbose=1)
-
 
 # create a method for prediction
 # load and prepare the image
@@ -270,21 +273,22 @@ def load_image(filename):
 print("prediction with the test data")
 t_model.evaluate(validation_dataset, batch_size=32, verbose=2)
 
-# do some prediction
+#do some prediction
 probability_model = Sequential([t_model, layers.Softmax()])
 
 print("see the results for an image")
 # load the image
-images_array = ['bike_242.bmp', 'carsgraz_253.bmp', 'bike_247.bmp', 'bike_244.bmp'];
+images_array=['bike_242.bmp','carsgraz_253.bmp','bike_247.bmp','bike_244.bmp'];
 
 for i in range(len(images_array)):
+
     image1 = load_image(images_array[i])
     predictions = probability_model.predict(image1)
 
-    print("The prediction class for:" + images_array[i] + " is:")
+    print("The prediction class for:"+images_array[i]+" is:")
     predicted_class_indices = np.argmax(predictions, axis=1)
     training_labels = training_dataset.class_indices
-    labels = dict((v, k) for k, v in training_labels.items())
+    labels = dict((v,k) for k,v in training_labels.items())
     predictions_y = [labels[k] for k in predicted_class_indices]
 
     print(predictions_y)
